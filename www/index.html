@@ -332,6 +332,18 @@ body{font-family:var(--fb);color:var(--parch);font-size:16px;position:relative}
   backdrop-filter:blur(4px);
 }
 .overlay.show{display:flex}
+/* VIEWER DE CLASSE */
+.cls-viewer-ov{position:fixed;inset:0;z-index:500;background:rgba(1,8,17,0.96);display:none;flex-direction:column;align-items:center;justify-content:flex-end;backdrop-filter:blur(6px)}
+.cls-viewer-ov.open{display:flex}
+.cls-viewer-sheet{width:100%;max-width:480px;border-radius:12px 12px 0 0;border:1px solid var(--gD);border-bottom:none;overflow:hidden;position:relative}
+.cls-viewer-img{width:100%;display:block;height:52vh;object-fit:cover;object-position:center 12%}
+.cls-viewer-body{background:rgba(1,8,17,0.97);padding:16px 18px 10px}
+.cls-viewer-name{font-family:var(--fh);font-size:18px;color:var(--gold);letter-spacing:3px;margin-bottom:5px}
+.cls-viewer-desc{font-size:13px;color:var(--parch);line-height:1.5;margin-bottom:4px}
+.cls-viewer-bonus{font-size:11px;color:var(--arcL);font-style:italic;margin-bottom:14px}
+.cls-viewer-confirm{width:100%;padding:14px;background:rgba(201,168,76,0.1);border:1px solid var(--gold);color:var(--gold);font-family:var(--fh);font-size:10px;letter-spacing:2.5px;cursor:pointer;border-radius:2px;margin-bottom:8px}
+.cls-viewer-cancel{width:100%;padding:10px;background:transparent;border:1px solid var(--gD);color:var(--pD);font-family:var(--fh);font-size:9px;letter-spacing:2px;cursor:pointer;border-radius:2px;margin-bottom:16px}
+.cls-viewer-close{position:absolute;top:10px;right:10px;background:rgba(1,8,17,0.7);border:1px solid rgba(255,255,255,0.15);color:var(--parch);width:34px;height:34px;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10}
 
 /* RESULT OVERLAY */
 .ov-card{
@@ -1352,37 +1364,37 @@ body{font-family:var(--fb);color:var(--parch);font-size:16px;position:relative}
 
   <div class="section-label" id="lbl-class">ESCOLHA SUA CLASSE</div>
   <div class="cls-grid">
-    <div class="cls-card" onclick="selectClass(this,'guerreiro','⚔️')">
+    <div class="cls-card" data-cls="guerreiro" onclick="openClassViewer('guerreiro','⚔️')">
       <img class="cls-img" src="img/guerreiro.png" alt="Guerreiro" onerror="this.style.display='none'">
       <div class="cls-name" id="cn-guerreiro">GUERREIRO</div>
       <div class="cls-desc" id="cd-guerreiro">Resiliência bruta. Aprende com as quedas.</div>
       <div class="cls-bonus" id="cb-guerreiro">+1 vida inicial</div>
     </div>
-    <div class="cls-card" onclick="selectClass(this,'mago','🔮')">
+    <div class="cls-card" data-cls="mago" onclick="openClassViewer('mago','🔮')">
       <img class="cls-img" src="img/mago.png" alt="Mago" onerror="this.style.display='none'">
       <div class="cls-name" id="cn-mago">MAGO</div>
       <div class="cls-desc" id="cd-mago">Visão arcana. Enxerga o que outros ignoram.</div>
       <div class="cls-bonus" id="cb-mago">Vê a categoria antes</div>
     </div>
-    <div class="cls-card" onclick="selectClass(this,'paladino','🛡️')">
+    <div class="cls-card" data-cls="paladino" onclick="openClassViewer('paladino','🛡️')">
       <img class="cls-img" src="img/paladino.png" alt="Paladino" onerror="this.style.display='none'">
       <div class="cls-name" id="cn-paladino">PALADINO</div>
       <div class="cls-desc" id="cd-paladino">Foco sagrado. A mente é escudo inabalável.</div>
       <div class="cls-bonus" id="cb-paladino">Névoa 5s mais curta</div>
     </div>
-    <div class="cls-card" onclick="selectClass(this,'lanceiro','🏹')">
+    <div class="cls-card" data-cls="lanceiro" onclick="openClassViewer('lanceiro','🏹')">
       <img class="cls-img" src="img/lanceiro.png" alt="Lanceiro" onerror="this.style.display='none'">
       <div class="cls-name" id="cn-lanceiro">LANCEIRO</div>
       <div class="cls-desc" id="cd-lanceiro">Precisão mortal. Velocidade é poder.</div>
       <div class="cls-bonus" id="cb-lanceiro">+2 pts por resposta rápida</div>
     </div>
-    <div class="cls-card" onclick="selectClass(this,'assassino','🗡️')">
+    <div class="cls-card" data-cls="assassino" onclick="openClassViewer('assassino','🗡️')">
       <img class="cls-img" src="img/assassino.png" alt="Assassino" onerror="this.style.display='none'">
       <div class="cls-name" id="cn-assassino">ASSASSINO</div>
       <div class="cls-desc" id="cd-assassino">Sombras e furtividade. Sempre tem saída.</div>
       <div class="cls-bonus" id="cb-assassino">+2 pulos iniciais</div>
     </div>
-    <div class="cls-card" onclick="selectClass(this,'druida','🌿')">
+    <div class="cls-card" data-cls="druida" onclick="openClassViewer('druida','🌿')">
       <img class="cls-img" src="img/druida.png" alt="Druida" onerror="this.style.display='none'">
       <div class="cls-name" id="cn-druida">DRUIDA</div>
       <div class="cls-desc" id="cd-druida">Sabedoria natural. Recompensas frequentes.</div>
@@ -4175,6 +4187,34 @@ function selectClass(el, cls, ico) {
   chkWBtn();
 }
 
+function openClassViewer(cls, ico) {
+  const ov = document.getElementById('cls-viewer');
+  const card = document.querySelector('.cls-card[data-cls="'+cls+'"]');
+  document.getElementById('cvImg').src = 'img/' + cls + '.png';
+  document.getElementById('cvName').textContent = card ? card.querySelector('[id^="cn-"]').textContent : cls.toUpperCase();
+  document.getElementById('cvDesc').textContent = card ? card.querySelector('[id^="cd-"]').textContent : '';
+  document.getElementById('cvBonus').textContent = card ? '✦ ' + card.querySelector('[id^="cb-"]').textContent : '';
+  ov.dataset.cls = cls;
+  ov.dataset.ico = ico;
+  ov.classList.add('open');
+}
+
+function closeClassViewer() {
+  document.getElementById('cls-viewer').classList.remove('open');
+}
+
+function confirmClassChoice() {
+  const ov = document.getElementById('cls-viewer');
+  const cls = ov.dataset.cls;
+  const ico = ov.dataset.ico;
+  document.querySelectorAll('.cls-card').forEach(c => c.classList.remove('sel'));
+  const card = document.querySelector('.cls-card[data-cls="'+cls+'"]');
+  if(card) card.classList.add('sel');
+  G.cls = cls; G.ico = ico;
+  chkWBtn();
+  closeClassViewer();
+}
+
 function chkWBtn() {
   const ok = document.getElementById('w-nick').value.trim().length > 1
     && document.querySelector('.cls-card.sel');
@@ -6908,6 +6948,21 @@ loadSeeds();
     <div style="font-size:11px;color:var(--pD);margin-bottom:12px" id="surv-best-txt"></div>
     <button class="ov-btn" onclick="startSurvival()">↩ JOGAR NOVAMENTE</button>
     <button class="ov-btn-ghost" onclick="document.getElementById('ov-survival').classList.remove('show');goMenuScreen()">🏠 MENU</button>
+  </div>
+</div>
+
+<!-- VIEWER DE CLASSE — abre ao tocar no card -->
+<div class="cls-viewer-ov" id="cls-viewer" onclick="closeClassViewer()">
+  <div class="cls-viewer-sheet" onclick="event.stopPropagation()">
+    <button class="cls-viewer-close" onclick="closeClassViewer()">✕</button>
+    <img class="cls-viewer-img" id="cvImg" src="" alt="">
+    <div class="cls-viewer-body">
+      <div class="cls-viewer-name" id="cvName"></div>
+      <div class="cls-viewer-desc" id="cvDesc"></div>
+      <div class="cls-viewer-bonus" id="cvBonus"></div>
+      <button class="cls-viewer-confirm" onclick="confirmClassChoice()">⚔ ESCOLHER ESTA CLASSE</button>
+      <button class="cls-viewer-cancel" onclick="closeClassViewer()">← VOLTAR</button>
+    </div>
   </div>
 </div>
 
