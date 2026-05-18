@@ -3461,10 +3461,11 @@ const SURV = { active:false, score:0 };
 function startSurvival() {
   hideAll();
   SURV.active = true; SURV.score = 0;
+  // Salva estado do jogo principal para restaurar após sobrevivência
+  G._survSavedOrd = G.ord ? G.ord.slice() : null;
+  G._survSavedIdx = G.idx || 0;
   document.getElementById('ov-survival').classList.remove('show');
-  // Mostrar badge no modo
-  const badge = document.getElementById('surv-mode-indicator');
-  // Reutiliza o fluxo normal de sementes mas sem sistema de HP
+  // Sobrevivência usa todas as sementes independente do nível
   G.ord = shuffle(Array.from({length:G.seeds.length},(_,i)=>i));
   G.idx = 0;
   goScreen('sg');
@@ -3474,6 +3475,15 @@ function startSurvival() {
 
 function endSurvival(won) {
   SURV.active = false;
+  // Restaura estado do jogo principal que foi salvo antes da sobrevivência
+  if(G._survSavedOrd && G._survSavedOrd.length === G.seeds.length) {
+    G.ord = G._survSavedOrd;
+    G.idx = G._survSavedIdx || 0;
+  } else {
+    G.ord = buildSeedPool();
+    G.idx = 0;
+  }
+  G._survSavedOrd = null; G._survSavedIdx = 0;
   const best = parseInt(localStorage.getItem('pda-surv-best')||'0');
   if(SURV.score > best) localStorage.setItem('pda-surv-best', String(SURV.score));
   const newBest = Math.max(SURV.score, best);
@@ -4187,7 +4197,7 @@ function loadAndContinue() {
     G.ord = s.ord;
     G.idx = s.idx || 0;
   } else {
-    G.ord = shuffle(Array.from({length:G.seeds.length},(_,i)=>i));
+    G.ord = buildSeedPool();
     G.idx = 0;
   }
   G.savedBattle = s.battle || null;
@@ -4257,7 +4267,7 @@ function startGame() {
   G.goldTalismanActive = false; G.escudoTotalActive = false; G.xpDoublerUntil = 0;
   G.variantCycle = 0;
   _seedIndex = null; _currentQ = null;
-  G.ord = shuffle(Array.from({length:G.seeds.length},(_,i)=>i));
+  G.ord = buildSeedPool();
   G.idx = 0;
   // Apaga save antigo e estados de compra, cria novo limpo
   localStorage.removeItem('pda-save');
@@ -4289,6 +4299,14 @@ function shuffle(a){
     const j=0|Math.random()*(i+1);[a[i],a[j]]=[a[j],a[i]];
   }
   return a;
+}
+
+// Constrói pool de sementes filtrada por nível do jogador
+// LV 1-20: só nivel 1 | LV 21-100: nivel 1+2 | LV 101+: todas
+function buildSeedPool() {
+  const maxNivel = G.lv <= 20 ? 1 : G.lv <= 100 ? 2 : 3;
+  const pool = (G.seeds || []).reduce((acc, s, i) => { if(s.nivel <= maxNivel) acc.push(i); return acc; }, []);
+  return shuffle(pool.length >= 10 ? pool : Array.from({length:(G.seeds||[]).length},(_,i)=>i));
 }
 
 // ─── SISTEMA DE VARIANTES DE PERGUNTA ─────────────────────────────────────
@@ -4367,7 +4385,7 @@ function nextRound() {
   }
 
   if(G.idx >= G.ord.length){
-    G.ord = shuffle(Array.from({length:G.seeds.length},(_,i)=>i));
+    G.ord = buildSeedPool();
     G.idx = 0;
     G.variantCycle = (G.variantCycle || 0) + 1;
   }
