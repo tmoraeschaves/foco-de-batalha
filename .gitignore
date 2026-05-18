@@ -1,0 +1,28 @@
+# Dependências
+node_modules/
+
+# Arquivos sensíveis — NUNCA commitar
+CREDENCIAIS.txt
+*.jks
+*.keystore
+local.properties
+
+# Arquivos internos Claude
+.claude/
+
+# Arquivos temporários / build / backups
+files.zip
+files/
+*.zip
+*.tmp
+batalhas_1.json
+
+# Android local
+android/local.properties
+android/.idea/
+android/build/
+android/app/build/
+
+# Python cache
+__pycache__/
+*.pyc

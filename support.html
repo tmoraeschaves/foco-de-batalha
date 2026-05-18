@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suporte — Foco de Batalha</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,sans-serif;background:#0c0905;color:#d4b896;line-height:1.7;padding:24px 16px;max-width:760px;margin:0 auto}
+
+  h1{font-size:22px;color:#c9a84c;margin-bottom:6px;letter-spacing:1px}
+  h2{font-size:16px;color:#c9a84c;margin:36px 0 10px;letter-spacing:0.5px;display:flex;align-items:center;gap:10px}
+  h3{font-size:13px;color:#d4a870;margin:18px 0 6px}
+  p{font-size:14px;margin-bottom:12px;color:#b8a080}
+  ul,ol{font-size:14px;color:#b8a080;padding-left:20px;margin-bottom:12px}
+  li{margin-bottom:6px}
+  a{color:#c9a84c}
+  strong{color:#d4b896}
+
+  .subtitle{font-size:13px;color:#6b5a3a;margin-bottom:32px;font-style:italic}
+
+  /* NAV */
+  .nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px}
+  .nav a{font-size:12px;color:#c9a84c;text-decoration:none;padding:5px 12px;border:1px solid rgba(201,168,76,0.25);border-radius:4px}
+  .nav a:hover{background:rgba(201,168,76,0.08)}
+
+  /* SECTION TABS */
+  .section-tabs{display:flex;gap:0;border-bottom:1px solid rgba(201,168,76,0.15);margin-bottom:28px;flex-wrap:wrap}
+  .section-tab{padding:10px 18px;font-size:12px;letter-spacing:1px;color:rgba(201,168,76,0.4);cursor:pointer;border-bottom:2px solid transparent;text-decoration:none;transition:all 0.2s}
+  .section-tab:hover,.section-tab.active{color:#c9a84c;border-bottom-color:#c9a84c}
+
+  /* CARDS */
+  .card{background:rgba(255,255,255,0.03);border:1px solid rgba(201,168,76,0.12);border-radius:8px;padding:20px;margin-bottom:14px}
+  .card-gold{border-color:rgba(201,168,76,0.25);background:rgba(201,168,76,0.04)}
+  .card-purple{border-color:rgba(107,47,160,0.35);background:rgba(107,47,160,0.06)}
+  .card-green{border-color:rgba(58,158,95,0.3);background:rgba(58,158,95,0.04)}
+
+  /* FAQ */
+  .faq-item{border-bottom:1px solid rgba(201,168,76,0.08);padding:14px 0}
+  .faq-item:last-child{border-bottom:none}
+  .faq-q{font-size:14px;color:#d4b896;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .faq-q::after{content:'▾';color:#c9a84c;flex-shrink:0;margin-top:1px}
+  .faq-a{font-size:13px;color:#b8a080;margin-top:8px;line-height:1.7}
+
+  /* CONTACT FORM */
+  .form-group{margin-bottom:14px}
+  .form-label{display:block;font-size:11px;letter-spacing:1px;color:rgba(201,168,76,0.6);margin-bottom:6px;text-transform:uppercase}
+  .form-input,.form-select,.form-textarea{
+    width:100%;background:rgba(0,0,0,0.4);border:1px solid rgba(201,168,76,0.2);
+    border-radius:4px;color:#d4b896;font-family:system-ui,sans-serif;font-size:14px;
+    padding:10px 12px;outline:none;transition:border-color 0.2s;
+  }
+  .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:#c9a84c}
+  .form-textarea{min-height:100px;resize:vertical}
+  .form-select option{background:#1a1208;color:#d4b896}
+  .form-select{cursor:pointer}
+  .btn-submit{
+    background:linear-gradient(180deg,#c9a84c,#7a5c14);color:#0c0905;
+    font-size:13px;font-weight:700;letter-spacing:2px;border:none;
+    border-radius:4px;padding:12px 28px;cursor:pointer;transition:filter 0.2s;
+    text-transform:uppercase;
+  }
+  .btn-submit:hover{filter:brightness(1.1)}
+  .form-note{font-size:11px;color:rgba(201,168,76,0.35);margin-top:8px;font-style:italic}
+
+  /* SPONSOR STEPS */
+  .steps{display:flex;flex-direction:column;gap:0}
+  .step{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid rgba(201,168,76,0.07)}
+  .step:last-child{border-bottom:none}
+  .step-num{width:32px;height:32px;border-radius:50%;border:2px solid #c9a84c;display:flex;align-items:center;justify-content:center;font-size:13px;color:#c9a84c;font-weight:700;flex-shrink:0;margin-top:2px}
+  .step-body{flex:1}
+  .step-title{font-size:13px;color:#d4b896;font-weight:600;margin-bottom:4px}
+  .step-desc{font-size:12px;color:#b8a080;line-height:1.6}
+
+  /* PRICE TABLE */
+  .price-table{width:100%;border-collapse:collapse;margin:12px 0}
+  .price-table th{text-align:left;font-size:11px;letter-spacing:1px;color:rgba(201,168,76,0.5);padding:8px 12px;border-bottom:1px solid rgba(201,168,76,0.12);text-transform:uppercase}
+  .price-table td{font-size:13px;color:#b8a080;padding:10px 12px;border-bottom:1px solid rgba(201,168,76,0.06)}
+  .price-table tr:last-child td{border-bottom:none}
+  .price-table td:last-child{color:#c9a84c;font-weight:600}
+  .badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:3px;margin-left:6px}
+  .badge-pop{background:rgba(201,168,76,0.2);color:#c9a84c;border:1px solid rgba(201,168,76,0.3)}
+  .badge-new{background:rgba(77,201,122,0.2);color:#4dc97a;border:1px solid rgba(77,201,122,0.3)}
+
+  /* FOOTER */
+  .footer-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:40px;padding-top:20px;border-top:1px solid rgba(201,168,76,0.1)}
+  .footer-links a{display:inline-block;padding:10px 20px;background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:6px;color:#c9a84c;text-decoration:none;font-size:13px}
+
+  /* SECTION VISIBILITY */
+  .section{display:none}
+  .section.active{display:block}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="index.html">← Voltar ao Jogo</a>
+  <a href="privacy.html">Política de Privacidade</a>
+</div>
+
+<h1>⚔️ Suporte — Foco de Batalha</h1>
+<p class="subtitle">Academia de Pupilos da Aura · Central de Ajuda</p>
+
+<!-- TABS DE NAVEGAÇÃO -->
+<div class="section-tabs">
+  <a class="section-tab active" href="#jogadores" onclick="showSection('jogadores',this)">🎮 Jogadores</a>
+  <a class="section-tab" href="#anunciantes" onclick="showSection('anunciantes',this)" id="tab-anunciantes">📢 Anunciantes</a>
+  <a class="section-tab" href="#contato" onclick="showSection('contato',this)">✉️ Contacto</a>
+</div>
+
+<!-- ════════════════════════════════════
+     SECÇÃO JOGADORES
+════════════════════════════════════ -->
+<div id="section-jogadores" class="section active">
+
+  <h2>🎮 Suporte para Jogadores</h2>
+
+  <div class="card card-gold">
+    <h3>Problemas comuns — resolução rápida</h3>
+    <ul>
+      <li><strong>Jogo não carrega:</strong> Aguarda 10 segundos e recarrega. Se persistir, limpa o cache do navegador/app.</li>
+      <li><strong>Progresso perdido:</strong> O progresso fica salvo no dispositivo. Se desinstalaste o app, o save local é apagado.</li>
+      <li><strong>Anúncio não funciona:</strong> Verifica a tua conexão à internet e tenta de novo.</li>
+      <li><strong>Moedas não creditadas:</strong> Sai do jogo e entra novamente — o saldo é atualizado ao reabrir.</li>
+    </ul>
+  </div>
+
+  <h3 style="margin-top:24px;margin-bottom:10px;color:#c9a84c;font-size:14px;letter-spacing:1px">PERGUNTAS FREQUENTES</h3>
+
+  <div class="faq-item">
+    <div class="faq-q">Como salvo o meu progresso?</div>
+    <div class="faq-a">O jogo salva automaticamente. Para fazer um save manual, toca no ícone 💾 no canto superior direito durante a partida e escolhe "Salvar Progresso".</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">Perdi as minhas vidas. O que faço?</div>
+    <div class="faq-a">Podes ganhar vidas assistindo anúncios gratuitos, comprando na loja com as tuas moedas, ou aguardando — as vidas regeneram 1 por hora (máx. 5).</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">O que são as Sementes?</div>
+    <div class="faq-a">Sementes são fragmentos de conhecimento que aparecem antes de cada batalha. Lês o texto, enfrentas a Névoa (distração), e depois respondes a uma questão baseada no que estudaste. O objetivo é treinar memória e foco cognitivo.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">O jogo funciona offline?</div>
+    <div class="faq-a">Sim. Após o primeiro carregamento, o jogo funciona completamente offline graças ao Service Worker. Os anúncios requerem conexão à internet.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">Como mudo o idioma?</div>
+    <div class="faq-a">Na tela inicial há seletores de bandeira 🇧🇷 🇺🇸 🇪🇸. A preferência é salva automaticamente.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">Os meus dados pessoais são coletados?</div>
+    <div class="faq-a">Não. O Foco de Batalha não envia dados pessoais a servidores externos. Tudo fica no teu dispositivo. Consulta a <a href="privacy.html">Política de Privacidade completa</a> para mais detalhes.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">Como apago o meu progresso?</div>
+    <div class="faq-a">No Android: Configurações do dispositivo → Apps → Foco de Batalha → Armazenamento → Limpar dados. No app: Menu → Configurações → Apagar Progresso.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">Encontrei um erro no conteúdo de uma semente. Como reporto?</div>
+    <div class="faq-a">Vai à aba <a href="#" onclick="showSection('contato',document.querySelector('[href=\'#contato\']'));return false">Contacto</a>, escolhe o assunto "Erro em semente" e descreve o conteúdo incorreto. Agradecemos muito o teu contributo!</div>
+  </div>
+
+  <div style="margin-top:24px">
+    <p style="font-size:13px;color:#6b5a3a">Não encontraste o que procurava? <a href="#" onclick="showSection('contato',document.querySelector('[href=\'#contato\']'));return false" style="color:#c9a84c">Envia-nos uma mensagem →</a></p>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════
+     SECÇÃO ANUNCIANTES
+════════════════════════════════════ -->
+<div id="section-anunciantes" class="section">
+
+  <h2>📢 Publicidade via Sementes</h2>
+
+  <div class="card card-purple">
+    <h3 style="color:#a06cd5;margin-top:0">O que são Sementes Patrocinadas?</h3>
+    <p>As Sementes são o coração do Foco de Batalha. A cada rodada, o jogador estuda um fragmento de texto durante 25 segundos antes de responder a uma questão. É um momento de atenção total — ideal para mensagens de marca com alto impacto e retenção.</p>
+    <p style="margin-bottom:0">Ao contrário dos anúncios tradicionais, <strong>o jogador escolhe ler</strong> — a semente faz parte do desafio que ele quer superar.</p>
+  </div>
+
+  <h2>📊 Por que anunciar aqui?</h2>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
+    <div class="card" style="text-align:center">
+      <div style="font-size:28px;margin-bottom:6px">👁️</div>
+      <div style="font-size:20px;color:#c9a84c;font-weight:700">25s</div>
+      <div style="font-size:11px;color:#b8a080">de atenção garantida<br>por semente</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:28px;margin-bottom:6px">🧠</div>
+      <div style="font-size:20px;color:#c9a84c;font-weight:700">Alta</div>
+      <div style="font-size:11px;color:#b8a080">retenção de memória<br>(o jogador é testado)</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:28px;margin-bottom:6px">🎯</div>
+      <div style="font-size:20px;color:#c9a84c;font-weight:700">Zero</div>
+      <div style="font-size:11px;color:#b8a080">skip — semente faz<br>parte do desafio</div>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:28px;margin-bottom:6px">📚</div>
+      <div style="font-size:20px;color:#c9a84c;font-weight:700">Nativo</div>
+      <div style="font-size:11px;color:#b8a080">integrado ao jogo,<br>não banner intrusivo</div>
+    </div>
+  </div>
+
+  <h2>💡 Formatos disponíveis</h2>
+
+  <table class="price-table">
+    <tr>
+      <th>Formato</th>
+      <th>Descrição</th>
+      <th>Mín. sementes</th>
+    </tr>
+    <tr>
+      <td><strong>Semente Educacional</strong> <span class="badge badge-pop">POPULAR</span></td>
+      <td>Curiosidade ou dado da sua marca em formato de semente. A marca é identificada subtilmente.</td>
+      <td>10 sementes</td>
+    </tr>
+    <tr>
+      <td><strong>Deck Temático</strong></td>
+      <td>Pacote de sementes sobre um tema completo (ex: história da sua empresa, curiosidades do setor).</td>
+      <td>30 sementes</td>
+    </tr>
+    <tr>
+      <td><strong>Semente Challenge</strong> <span class="badge badge-new">NOVO</span></td>
+      <td>Semente com branding destacado e questão de múltipla escolha criada pela sua equipe.</td>
+      <td>5 sementes</td>
+    </tr>
+    <tr>
+      <td><strong>Patrocínio de Nível</strong></td>
+      <td>A tela de novo nível menciona a sua marca como patrocinadora do conteúdo daquele capítulo.</td>
+      <td>1 nível</td>
+    </tr>
+  </table>
+
+  <h2>🚀 Como funciona o processo</h2>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Envia o teu interesse</div>
+        <div class="step-desc">Preenche o formulário de contacto para anunciantes abaixo. Recebe uma proposta personalizada em até 2 dias úteis.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Submetes o conteúdo</div>
+        <div class="step-desc">Envias os textos das sementes e perguntas. Podem ser curiosidades sobre a sua empresa, setor, produto ou qualquer conteúdo educacional relevante.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Revisão e aprovação</div>
+        <div class="step-desc">A nossa equipe revisa o conteúdo para garantir qualidade, adequação à audiência e alinhamento com as diretrizes do jogo. Revisão em até 3 dias úteis.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Publicação</div>
+        <div class="step-desc">As sementes são publicadas na próxima atualização do banco de dados. A tua marca fica ativa para todos os jogadores da plataforma.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">Relatório de desempenho</div>
+        <div class="step-desc">Recebes um relatório mensal com impressões, taxa de acerto e tempo médio de leitura das tuas sementes (dados anonimizados e agregados).</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>📋 Diretrizes de Conteúdo</h2>
+  <div class="card">
+    <h3 style="color:#4dc97a;margin-top:0">✅ Conteúdo aceite</h3>
+    <ul>
+      <li>Curiosidades históricas, científicas ou culturais relacionadas à sua marca/setor</li>
+      <li>Dados e estatísticas verificáveis e citadas</li>
+      <li>Conteúdo educacional sobre produtos, processos ou inovações</li>
+      <li>Histórias de impacto social ou ambiental da empresa</li>
+    </ul>
+    <h3 style="color:#e04040;margin-top:14px">❌ Conteúdo não aceite</h3>
+    <ul style="margin-bottom:0">
+      <li>Afirmações não verificadas ou pseudocientíficas</li>
+      <li>Conteúdo político, religioso ou polémico</li>
+      <li>Publicidade direta de produtos (ex: "compre agora")</li>
+      <li>Conteúdo inadequado para menores de 13 anos</li>
+    </ul>
+  </div>
+
+  <div class="card card-purple" style="margin-top:20px">
+    <h3 style="color:#a06cd5;margin-top:0">Pronto para anunciar?</h3>
+    <p style="margin-bottom:12px">Envia o teu interesse abaixo. Resposta garantida em até 2 dias úteis.</p>
+    <a href="#" onclick="showSection('contato',document.getElementById('tab-contato'));document.getElementById('assunto-select').value='anunciante';return false"
+       style="display:inline-block;background:linear-gradient(180deg,#a06cd5,#5a1fa0);color:#fff;padding:11px 24px;border-radius:4px;text-decoration:none;font-size:12px;letter-spacing:2px;font-weight:700">
+      ENVIAR PROPOSTA →
+    </a>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════
+     SECÇÃO CONTACTO
+════════════════════════════════════ -->
+<div id="section-contato" class="section">
+
+  <h2>✉️ Enviar Mensagem</h2>
+
+  <div class="card">
+    <div class="form-group">
+      <label class="form-label" for="nome-input">Nome ou apelido</label>
+      <input class="form-input" id="nome-input" type="text" placeholder="Como devo chamar-te?">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="email-input">Email para resposta</label>
+      <input class="form-input" id="email-input" type="email" placeholder="teu@email.com">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="assunto-select">Assunto</label>
+      <select class="form-select" id="assunto-select">
+        <option value="">— Escolhe o assunto —</option>
+        <option value="bug">🐛 Reportar bug ou erro no jogo</option>
+        <option value="semente">📖 Erro no conteúdo de uma semente</option>
+        <option value="conta">💾 Problema com save / progresso</option>
+        <option value="compra">💳 Problema com compra ou moedas</option>
+        <option value="anunciante">📢 Interesse em sementes patrocinadas</option>
+        <option value="parceria">🤝 Proposta de parceria</option>
+        <option value="imprensa">📰 Imprensa / media</option>
+        <option value="outro">❓ Outro assunto</option>
+      </select>
+    </div>
+
+    <div class="form-group" id="anunciante-extra" style="display:none">
+      <div class="card card-purple" style="margin:0 0 14px">
+        <p style="font-size:12px;margin-bottom:6px;color:#a06cd5">📢 Antes de continuar, lê a nossa <a href="#" onclick="showSection('anunciantes',document.querySelector('[href=\'#anunciantes\']'));return false">página de anunciantes</a> para conhecer os formatos e diretrizes.</p>
+        <p style="font-size:12px;margin-bottom:0;color:#b8a080">Inclui no campo abaixo: <strong>nome da empresa, setor, tipo de conteúdo pretendido e volume estimado de sementes.</strong></p>
+      </div>
+      <label class="form-label" for="empresa-input">Nome da empresa / organização</label>
+      <input class="form-input" id="empresa-input" type="text" placeholder="Empresa Lda.">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="msg-textarea">Mensagem</label>
+      <textarea class="form-textarea" id="msg-textarea" placeholder="Descreve o teu problema ou proposta com o máximo de detalhe possível..."></textarea>
+    </div>
+
+    <button class="btn-submit" onclick="submitForm()">ENVIAR MENSAGEM</button>
+    <p class="form-note">⚔️ Respondemos em até 3 dias úteis · privacidade@focodebatalha.com</p>
+
+    <div id="form-success" style="display:none;margin-top:16px;padding:12px;background:rgba(58,158,95,0.12);border:1px solid rgba(58,158,95,0.3);border-radius:6px;font-size:13px;color:#4dc97a">
+      ✔ Mensagem enviada com sucesso! Responderemos em breve.
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:8px">
+    <h3 style="margin-top:0">Contacto direto</h3>
+    <p style="font-size:13px">📧 <a href="mailto:suporte@focodebatalha.com">suporte@focodebatalha.com</a> — Suporte geral<br>
+    📢 <a href="mailto:publicidade@focodebatalha.com">publicidade@focodebatalha.com</a> — Sementes patrocinadas<br>
+    🔒 <a href="mailto:privacidade@focodebatalha.com">privacidade@focodebatalha.com</a> — Privacidade e LGPD</p>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer-links">
+  <a href="index.html">← Voltar ao Jogo</a>
+  <a href="privacy.html">Política de Privacidade</a>
+</div>
+
+<script>
+  // Tab navigation
+  function showSection(id, tabEl) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.section-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('section-' + id).classList.add('active');
+    if(tabEl) tabEl.classList.add('active');
+  }
+
+  // Show anunciante extra fields
+  document.getElementById('assunto-select').addEventListener('change', function(){
+    document.getElementById('anunciante-extra').style.display =
+      (this.value === 'anunciante' || this.value === 'parceria') ? 'block' : 'none';
+  });
+
+  // Handle anchor on load (#anunciantes)
+  window.addEventListener('DOMContentLoaded', () => {
+    const hash = window.location.hash.replace('#','');
+    if(hash === 'anunciantes') {
+      showSection('anunciantes', document.querySelector('[href="#anunciantes"]'));
+    } else if(hash === 'contato') {
+      showSection('contato', document.querySelector('[href="#contato"]'));
+    }
+  });
+
+  // Form submit (mailto fallback — substituir por fetch/API quando disponível)
+  function submitForm() {
+    const nome    = document.getElementById('nome-input').value.trim();
+    const email   = document.getElementById('email-input').value.trim();
+    const assunto = document.getElementById('assunto-select').value;
+    const msg     = document.getElementById('msg-textarea').value.trim();
+
+    if(!email || !assunto || !msg) {
+      alert('Por favor preenche o email, assunto e mensagem antes de enviar.');
+      return;
+    }
+
+    const assuntoMap = {
+      bug:'Bug no jogo', semente:'Erro em semente', conta:'Problema com save',
+      compra:'Problema com compra', anunciante:'Interesse em anunciar',
+      parceria:'Proposta de parceria', imprensa:'Imprensa', outro:'Outro'
+    };
+
+    const subject = encodeURIComponent('[Foco de Batalha] ' + (assuntoMap[assunto] || assunto));
+    const empresa = document.getElementById('empresa-input').value.trim();
+    const body = encodeURIComponent(
+      `De: ${nome || 'Não informado'}\nEmail: ${email}\nEmpresa: ${empresa || '-'}\n\n${msg}`
+    );
+
+    // Abre cliente de email como fallback
+    window.location.href = `mailto:suporte@focodebatalha.com?subject=${subject}&body=${body}`;
+
+    document.getElementById('form-success').style.display = 'block';
+  }
+</script>
+
+</body>
+</html>

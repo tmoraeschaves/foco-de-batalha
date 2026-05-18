@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="80" fill="#0c0905"/>
+  <circle cx="256" cy="256" r="200" fill="none" stroke="#c9a84c" stroke-width="6" opacity="0.4"/>
+  <circle cx="256" cy="256" r="170" fill="none" stroke="#c9a84c" stroke-width="2" opacity="0.2"/>
+  <!-- Espada vertical -->
+  <rect x="248" y="80" width="16" height="220" rx="4" fill="#c9a84c"/>
+  <!-- Guarda da espada -->
+  <rect x="196" y="275" width="120" height="14" rx="4" fill="#c9a84c"/>
+  <!-- Cabo -->
+  <rect x="250" y="289" width="12" height="70" rx="3" fill="#8a6820"/>
+  <!-- Gema no cabo -->
+  <circle cx="256" cy="370" r="10" fill="#c9a84c" opacity="0.8"/>
+  <!-- Ponta da espada -->
+  <polygon points="248,80 264,80 256,52" fill="#c9a84c"/>
+  <!-- Brilho na lâmina -->
+  <rect x="252" y="90" width="4" height="160" rx="2" fill="#f0d080" opacity="0.5"/>
+  <!-- Texto FOCO -->
+  <text x="256" y="450" font-family="serif" font-size="44" font-weight="bold" fill="#c9a84c" text-anchor="middle" letter-spacing="6">FOCO</text>
+  <!-- Ornamentos -->
+  <text x="256" y="478" font-family="serif" font-size="18" fill="#c9a84c" text-anchor="middle" opacity="0.6" letter-spacing="3">BATALHA</text>
+</svg>

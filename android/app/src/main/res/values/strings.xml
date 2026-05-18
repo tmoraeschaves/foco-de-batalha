@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Foco de Batalha</string>
+    <string name="title_activity_main">Foco de Batalha</string>
+    <string name="package_name">com.focodebatalha.app</string>
+    <string name="custom_url_scheme">com.focodebatalha.app</string>
+    <string name="app_id">SUBSTITUIR_PELO_ID_DO_PLAY_GAMES</string>
+</resources>
