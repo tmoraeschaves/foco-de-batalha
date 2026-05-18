@@ -1,5 +1,10 @@
 apply plugin: 'com.android.application'
 
+// Lê credenciais do local.properties (nunca commitado no git)
+def localProps = new Properties()
+def localPropsFile = rootProject.file('local.properties')
+if (localPropsFile.exists()) localProps.load(new FileInputStream(localPropsFile))
+
 android {
     namespace "com.focodebatalha.app"
     compileSdk rootProject.ext.compileSdkVersion
@@ -16,8 +21,17 @@ android {
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        release {
+            storeFile file(localProps['KEYSTORE_PATH'] ?: '../../foco-batalha-release.jks')
+            storePassword localProps['KEYSTORE_PASSWORD'] ?: ''
+            keyAlias localProps['KEY_ALIAS'] ?: ''
+            keyPassword localProps['KEY_PASSWORD'] ?: ''
+        }
+    }
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
