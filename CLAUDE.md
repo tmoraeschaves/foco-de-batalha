@@ -6,7 +6,7 @@ Single-file PWA + Capacitor Android. Sem backend. Tudo em localStorage.
 
 ## Estrutura do Projeto
 
-```
+```text
 D:\GITHUB\FOCO_DE_BATALHA\
 ├── www/
 │   ├── index.html      ← Jogo completo (~350 KB, todo CSS/JS embutido)
@@ -29,7 +29,7 @@ D:\GITHUB\FOCO_DE_BATALHA\
 ## Arquivos Principais
 
 | Arquivo | Descrição |
-|---------|-----------|
+| ------- | --------- |
 | `www/index.html` | Todo o jogo: CSS + HTML + JS em um único arquivo (~6400 linhas) |
 | `www/batalhas.json` | Sementes de conhecimento: nivel 1/2/3, semente, pergunta, opcoes, correta + EN/ES |
 | `www/img/` | Arte das 6 classes, boss, personagem pupilo, tela de abertura |
@@ -92,10 +92,12 @@ Imagens em `www/img/` (geradas por Gemini + ChatGPT):
 - [x] Feature Graphic 1024×500 PNG — em `store-assets/feature-graphic.png`
 - [x] `npm install && npx cap sync` — feito
 - [x] Sincronizar GitHub — feito (branch main sincronizado)
-- [ ] Screenshots mín. 2 (16:9) no emulador Android
+- [x] Adaptive icon — gerado em todas as densidades (mdpi→xxxhdpi)
+- [x] Build `.aab` assinado — gerado em `android\app\build\outputs\bundle\release\app-release.aab`
+- [ ] Instalar APK de teste no dispositivo (Android Studio → Run → Run 'app')
+- [ ] Screenshots mín. 2 (16:9) no emulador
 - [ ] Classificação etária IARC no Play Console
-- [ ] Adaptive icon (foreground + background layers)
-- [ ] Build `.aab` assinado no Android Studio
+- [ ] Upload do .aab no Play Console
 
 ### Dívida técnica conhecida
 
@@ -112,12 +114,14 @@ Imagens em `www/img/` (geradas por Gemini + ChatGPT):
 - Tradução completa das 813+ perguntas PT→EN/ES no batalhas.json
 
 ## Modelo de Negócio
+
 - Anúncios recompensados (voluntários, troca por itens)
 - IAP — loja de moedas (placeholder funcional)
 - Battle Pass (2000 moedas/temporada)
 - B2B — Sementes Patrocinadas (empresas pagam para inserir conteúdo)
 
 ## Comandos
+
 ```bash
 npm install
 npx cap sync
