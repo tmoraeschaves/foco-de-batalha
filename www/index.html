@@ -4113,7 +4113,7 @@ function saveGame() {
     nick:G.nick, cls:G.cls, ico:G.ico,
     vidas:G.vidas, pulos:G.pulos, pts:G.pts,
     streak:G.streak, lv:G.lv, cy:G.cy, moedas:G.moedas||0,
-    idx:G.idx, rewardToggle:G.rewardToggle, variantCycle:G.variantCycle||0,
+    idx:G.idx, ord:G.ord, rewardToggle:G.rewardToggle, variantCycle:G.variantCycle||0,
     lang:LANG, ts:Date.now(),
     inventory:G.inventory, tier:G.tier,
     equip:G.equip, extraSlots:G.extraSlots||0,
@@ -4138,7 +4138,7 @@ function silentSave() {
       nick:G.nick, cls:G.cls, ico:G.ico,
       vidas:G.vidas, pulos:G.pulos, pts:G.pts,
       streak:G.streak, lv:G.lv, cy:G.cy, moedas:G.moedas||0,
-      idx:G.idx, rewardToggle:G.rewardToggle, variantCycle:G.variantCycle||0,
+      idx:G.idx, ord:G.ord, rewardToggle:G.rewardToggle, variantCycle:G.variantCycle||0,
       lang:LANG, ts:Date.now(),
       inventory:G.inventory, tier:G.tier,
       equip:G.equip, extraSlots:G.extraSlots||0,
@@ -4183,8 +4183,13 @@ function loadAndContinue() {
   G.xpDoublerUntil = s.xpDoublerUntil || 0;
   G.variantCycle = s.variantCycle || 0;
   _seedIndex = null; _currentQ = null;
-  G.ord = shuffle(Array.from({length:G.seeds.length},(_,i)=>i));
-  G.idx = 0;
+  if(s.ord && s.ord.length === G.seeds.length) {
+    G.ord = s.ord;
+    G.idx = s.idx || 0;
+  } else {
+    G.ord = shuffle(Array.from({length:G.seeds.length},(_,i)=>i));
+    G.idx = 0;
+  }
   G.savedBattle = s.battle || null;
   document.getElementById('hud').style.display='block';
   document.getElementById('bottom-nav').style.display='flex';
