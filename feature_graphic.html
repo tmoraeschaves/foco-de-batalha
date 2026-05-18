@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Feature Graphic — Foco de Batalha</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  width: 1024px;
+  height: 500px;
+  overflow: hidden;
+  position: relative;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  background: #010811;
+}
+
+/* Arte como fundo */
+.bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('Foco de Batalha ARTES DO JOGO/Pupilo.png');
+  background-size: cover;
+  background-position: center 20%;
+}
+
+/* Gradiente escurecendo bordas para o texto respirar */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to right,
+      rgba(1,8,17,0.92) 0%,
+      rgba(1,8,17,0.55) 35%,
+      rgba(1,8,17,0.15) 55%,
+      rgba(1,8,17,0.60) 100%
+    );
+}
+
+/* Vinheta inferior */
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(1,8,17,0.85) 0%, transparent 40%);
+}
+
+/* Conteúdo à esquerda */
+.content {
+  position: absolute;
+  left: 52px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  max-width: 420px;
+}
+
+.academia {
+  font-size: 12px;
+  color: #c9a84c;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 600;
+  margin-bottom: 14px;
+  opacity: 0.9;
+}
+
+.title-main {
+  font-size: 68px;
+  font-weight: 900;
+  color: #ffffff;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 30px rgba(0,0,0,0.9), 0 0 60px rgba(0,0,0,0.8);
+  margin-bottom: 4px;
+}
+
+.title-accent {
+  font-size: 68px;
+  font-weight: 900;
+  color: #c9a84c;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: 2px;
+  text-shadow: 0 0 40px rgba(201,168,76,0.6), 0 2px 20px rgba(0,0,0,0.9);
+  margin-bottom: 20px;
+  display: block;
+}
+
+/* Divisor dourado */
+.divider {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(to right, #c9a84c, transparent);
+  margin-bottom: 18px;
+}
+
+.tagline {
+  font-size: 15px;
+  color: #e8d5a3;
+  font-family: 'Segoe UI', sans-serif;
+  font-style: italic;
+  line-height: 1.5;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.9);
+  opacity: 0.9;
+}
+
+/* Destaques inferiores */
+.badges {
+  position: absolute;
+  bottom: 32px;
+  left: 52px;
+  display: flex;
+  gap: 12px;
+  z-index: 10;
+}
+
+.badge {
+  background: rgba(201,168,76,0.12);
+  border: 1px solid rgba(201,168,76,0.4);
+  padding: 5px 14px;
+  border-radius: 2px;
+  color: #c9a84c;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 600;
+}
+
+/* Cantos decorativos */
+.corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  z-index: 10;
+}
+.corner-tl { top: 20px; left: 20px; border-top: 2px solid #c9a84c; border-left: 2px solid #c9a84c; }
+.corner-tr { top: 20px; right: 20px; border-top: 2px solid #c9a84c; border-right: 2px solid #c9a84c; }
+.corner-bl { bottom: 20px; left: 20px; border-bottom: 2px solid #c9a84c; border-left: 2px solid #c9a84c; }
+.corner-br { bottom: 20px; right: 20px; border-bottom: 2px solid #c9a84c; border-right: 2px solid #c9a84c; }
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<div class="overlay"></div>
+<div class="vignette"></div>
+
+<div class="corner corner-tl"></div>
+<div class="corner corner-tr"></div>
+<div class="corner corner-bl"></div>
+<div class="corner corner-br"></div>
+
+<div class="content">
+  <p class="academia">Academia de Pupilos da Aura</p>
+  <h1 class="title-main">Foco de</h1>
+  <span class="title-accent">Batalha</span>
+  <div class="divider"></div>
+  <p class="tagline">Enfrente inimigos, responda sementes<br>do saber e evolua como guerreiro do conhecimento.</p>
+</div>
+
+<div class="badges">
+  <span class="badge">RPG Educacional</span>
+  <span class="badge">6 Classes</span>
+  <span class="badge">1.446 Sementes</span>
+  <span class="badge">Offline</span>
+</div>
+
+</body>
+</html>
