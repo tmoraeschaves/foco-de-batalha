@@ -1,4 +1,4 @@
-const CACHE = 'foco-batalha-v9';
+const CACHE = 'foco-batalha-v10';
 const ASSETS = [
   './',
   './index.html',

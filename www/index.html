@@ -184,32 +184,20 @@ body{font-family:var(--fb);color:var(--parch);font-size:16px;position:relative}
 .btn-primary:disabled{opacity:0.28;cursor:not-allowed;filter:none}
 
 /* ══════════════════════════════════════════════════════════
-   HUD
+   HUD — removido; stats integrados na arena
 ══════════════════════════════════════════════════════════ */
-#hud{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  display:none;
-  background:linear-gradient(180deg,rgba(12,9,5,0.98) 0%,rgba(12,9,5,0.85) 100%);
-  border-bottom:1px solid rgba(201,168,76,0.12);
-  padding:8px 12px calc(8px + env(safe-area-inset-top,0px));
-  padding-top:calc(8px + env(safe-area-inset-top,0px));
-}
-.hud-inner{display:flex;align-items:center;gap:8px}
-.hud-brand{font-family:var(--fh);font-size:9px;letter-spacing:2px;color:var(--gold);flex-shrink:0}
-.hud-pills{display:flex;gap:5px;flex:1}
+#hud{display:none!important}
 .hud-pill{display:flex;align-items:center;gap:2px;background:rgba(0,0,0,0.4);
   border:1px solid rgba(201,168,76,0.15);border-radius:20px;padding:3px 8px;transition:border-color 0.3s}
-.hud-pill .ico{font-size:12px}
+.hud-pill .ico{font-size:11px}
 .hud-pill .val{font-family:var(--fh);font-size:10px;color:var(--gold)}
 .hud-pill.coin-pop{animation:coin-pop 0.5s ease}
 @keyframes coin-pop{0%,100%{border-color:rgba(201,168,76,0.15);transform:scale(1)}50%{border-color:var(--gold);transform:scale(1.12);box-shadow:0 0 8px rgba(201,168,76,0.5)}}
-.hud-rank{font-family:var(--fh);font-size:8px;color:var(--pM);letter-spacing:1px;flex-shrink:0}
-.hud-save-btn{
-  background:none;border:1px solid var(--gD);border-radius:2px;
-  color:var(--pD);font-size:12px;padding:4px 7px;cursor:pointer;
-  flex-shrink:0;transition:all 0.2s;
-}
-.hud-save-btn:active{background:var(--gG)}
+/* Barra de stats integrada na arena */
+.arena-stats{display:flex;align-items:center;gap:6px;padding:5px 0 2px;flex-wrap:wrap}
+.arena-mute-btn{background:none;border:1px solid var(--gD);border-radius:20px;
+  color:var(--pD);font-size:11px;padding:3px 8px;cursor:pointer;margin-left:auto}
+.arena-mute-btn:active{background:var(--gG)}
 
 /* ══════════════════════════════════════════════════════════
    TELA GAME
@@ -1311,21 +1299,6 @@ body{font-family:var(--fb);color:var(--parch);font-size:16px;position:relative}
 <div id="flash"></div>
 <div id="toast"></div>
 
-<!-- HUD FIXO -->
-<div id="hud">
-  <div class="hud-inner">
-    <div class="hud-brand">⚔ FOCO</div>
-    <div class="hud-pills">
-      <div class="hud-pill"><span class="ico">❤️</span><span class="val" id="hv">1</span></div>
-      <div class="hud-pill"><span class="ico">⚡</span><span class="val" id="hp">1</span></div>
-      <div class="hud-pill"><span class="ico">🔥</span><span class="val" id="hs">0</span></div>
-      <div class="hud-pill"><span class="ico">💰</span><span class="val" id="hm">0</span></div>
-    </div>
-    <div class="hud-rank" id="hr">🌱 PUPILO</div>
-    <button class="hud-save-btn" onclick="showSaveOv()" title="Salvar & Sair">💾</button>
-    <button class="hud-save-btn" id="btn-mute" onclick="toggleMute()" title="Som" style="margin-left:2px">🔊</button>
-  </div>
-</div>
 
 <!-- ══ TELA INTRO HISTÓRIA ══ -->
 <div class="screen active" id="si">
@@ -1553,6 +1526,16 @@ body{font-family:var(--fb);color:var(--parch);font-size:16px;position:relative}
         <div class="battle-prog-fill" id="battle-prog" style="width:0%"></div>
       </div>
       <div style="font-family:var(--fh);font-size:7px;color:rgba(201,168,76,0.3)" id="battle-count">0/10</div>
+    </div>
+
+    <!-- Stats integrados (substitui HUD) -->
+    <div class="arena-stats">
+      <div class="hud-pill"><span class="ico">❤️</span><span class="val" id="hv">1</span></div>
+      <div class="hud-pill"><span class="ico">⚡</span><span class="val" id="hp">1</span></div>
+      <div class="hud-pill"><span class="ico">🔥</span><span class="val" id="hs">0</span></div>
+      <div class="hud-pill"><span class="ico">💰</span><span class="val" id="hm">0</span></div>
+      <div class="hud-pill" style="border-color:transparent;background:none"><span class="val" id="hr" style="font-size:8px;color:var(--pM)">🌱 PUPILO</span></div>
+      <button class="arena-mute-btn" id="btn-mute" onclick="toggleMute()" title="Som">🔊</button>
     </div>
 
   </div>
@@ -4201,7 +4184,7 @@ function loadAndContinue() {
     G.idx = 0;
   }
   G.savedBattle = s.battle || null;
-  document.getElementById('hud').style.display='block';
+  // hud removido
   document.getElementById('bottom-nav').style.display='flex';
   goMenuScreen();
 }
@@ -4274,13 +4257,13 @@ function startGame() {
   localStorage.removeItem('pda-fbuy-talisman');
   localStorage.removeItem('pda-offer-shown');
   silentSave();
-  document.getElementById('hud').style.display='block';
+  // hud removido
   document.getElementById('bottom-nav').style.display='flex';
   goMenuScreen();
 }
 
 function startGameUI() {
-  document.getElementById('hud').style.display='block';
+  // hud removido
   document.getElementById('bottom-nav').style.display='flex';
   B.enemy = null;
   G.inMenu = false;
@@ -5969,7 +5952,7 @@ function exitGame() {
   scheduleStreakReminder();
   trackEvent('session_end', { level: G.lv, pts: G.pts, class: G.cls });
   document.getElementById('ov-save').classList.remove('show');
-  document.getElementById('hud').style.display='none';
+  // hud removido
   document.getElementById('bottom-nav').style.display='none';
   hideAll();
   G.inMenu = true;
