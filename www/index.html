@@ -693,9 +693,10 @@ body{font-family:var(--fb);color:var(--parch);font-size:16px;position:relative}
 }
 .nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;
   font-family:var(--fh);font-size:7px;letter-spacing:1px;color:rgba(201,168,76,0.3);
-  background:none;border:none;cursor:pointer;padding:5px 18px;transition:color 0.2s;min-width:60px}
+  background:none;border:none;cursor:pointer;padding:5px 0;transition:color 0.2s;
+  flex:1;min-width:0}
 .nav-btn.active{color:var(--gold)}
-.nav-btn .nav-icon{font-size:17px}
+.nav-btn .nav-icon{font-size:20px}
 
 /* ══════════════════════════════════════════════════════════
    FLASH DE ACERTO/ERRO
@@ -1404,10 +1405,11 @@ body{font-family:var(--fb);color:var(--parch);font-size:16px;position:relative}
       <div class="menu-player-name" id="menu-nick">PUPILO</div>
       <div class="menu-player-rank" id="menu-rank">🌱 PUPILO · Nível 1</div>
       <div class="menu-resources">
-        <div class="menu-res-pill">❤️ <span id="menu-vida">1</span></div>
-        <div class="menu-res-pill">⚡ <span id="menu-pulo">1</span></div>
-        <div class="menu-res-pill">🔥 <span id="menu-streak">0</span></div>
-        <div class="menu-res-pill">⭐ <span id="menu-pts">0</span></div>
+        <div class="menu-res-pill" title="Vidas">❤️ <span id="menu-vida">1</span></div>
+        <div class="menu-res-pill" title="Pulos">⚡ <span id="menu-pulo">1</span></div>
+        <div class="menu-res-pill" title="Moedas">💰 <span id="menu-moedas">0</span></div>
+        <div class="menu-res-pill" title="Combo — acertos consecutivos">🔥 COMBO <span id="menu-streak">0</span></div>
+        <div class="menu-res-pill" title="Pontos totais">⭐ <span id="menu-pts">0</span></div>
       </div>
     </div>
   </div>
@@ -6164,6 +6166,7 @@ function goMenuScreen(context) {
   if(el('menu-rank'))        el('menu-rank').textContent = ctMenu.icon+' '+ctMenu.title+' · '+(t.lbl_nv||'NÍVEL')+' '+G.lv;
   if(el('menu-vida'))        el('menu-vida').textContent = G.vidas;
   if(el('menu-pulo'))        el('menu-pulo').textContent = G.pulos;
+  if(el('menu-moedas'))      el('menu-moedas').textContent = G.moedas || 0;
   if(el('menu-streak'))      el('menu-streak').textContent = G.streak;
   if(el('menu-pts'))         el('menu-pts').textContent = G.pts;
   if(el('menu-enemy-icon'))  el('menu-enemy-icon').textContent = previewEnemy.sprite || previewEnemy.icon || '👹';
