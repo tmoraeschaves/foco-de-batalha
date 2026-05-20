@@ -1,6 +1,7 @@
 # FOCO DE BATALHA — CLAUDE.md
 
 ## Visão Geral
+
 RPG educacional mobile chamado "FOCO DE BATALHA — Academia de Pupilos da Aura".
 Single-file PWA + Capacitor Android. Sem backend. Tudo em localStorage.
 
@@ -12,7 +13,7 @@ D:\GITHUB\FOCO_DE_BATALHA\
 │   ├── index.html      ← Jogo completo (~350 KB, todo CSS/JS embutido)
 │   ├── batalhas.json   ← 1.419 sementes de conhecimento (PT/EN/ES, ~1.2 MB)
 │   ├── manifest.json   ← PWA manifest (lang pt-BR, ícones separados por purpose)
-│   ├── sw.js           ← Service Worker v8 (cache offline)
+│   ├── sw.js           ← Service Worker v12 (cache offline)
 │   ├── img/            ← Arte do jogo: guerreiro/mago/paladino/lanceiro/assassino/druida/boss_goblin/pupilo/abertura/capa.png
 │   └── icons/          ← icon-192.png, icon-512.png, icon.svg
 ├── store-assets/       ← feature-graphic.png (1024×500)
@@ -53,6 +54,10 @@ D:\GITHUB\FOCO_DE_BATALHA\
 - Botão Voltar Android tratado (Capacitor App plugin)
 - Filtro de sementes por nível: LV1-20 só nivel 1, LV21-100 nivel 1+2, LV101+ todas
 - Modo Sobrevivência preserva estado do jogo principal ao entrar/sair
+- HUD removido (era `position:fixed;top:0` sobrepondo a interface no mobile); stats (❤️⚡🔥💰) integrados na arena
+- Menu header com 💰 moedas e 🔥 COMBO label (combo = acertos consecutivos)
+- Bottom-nav exibe completamente em telas estreitas (`flex:1; min-width:0`)
+- `nextRound()` garante que 1ª semente do novo ciclo ≠ última do ciclo anterior (evita repetição na fronteira)
 
 ### Arte integrada
 
@@ -94,7 +99,7 @@ Imagens em `www/img/` (geradas por Gemini + ChatGPT):
 - [x] Sincronizar GitHub — feito (branch main sincronizado)
 - [x] Adaptive icon — gerado em todas as densidades (mdpi→xxxhdpi)
 - [x] Build `.aab` assinado — gerado em `android\app\build\outputs\bundle\release\app-release.aab`
-- [ ] Instalar APK de teste no dispositivo (Android Studio → Run → Run 'app')
+- [x] APK de teste instalado no dispositivo físico — confirmado pelo utilizador
 - [ ] Screenshots mín. 2 (16:9) no emulador
 - [ ] Classificação etária IARC no Play Console
 - [ ] Upload do .aab no Play Console
