@@ -4290,8 +4290,9 @@ function shuffle(a){
 // Constrói pool de sementes filtrada por nível do jogador
 // LV 1-20: só nivel 1 | LV 21-100: nivel 1+2 | LV 101+: todas
 function buildSeedPool() {
-  const maxNivel = G.lv <= 20 ? 1 : G.lv <= 100 ? 2 : 3;
-  const pool = (G.seeds || []).reduce((acc, s, i) => { if(s.nivel <= maxNivel) acc.push(i); return acc; }, []);
+  // LV1-20 → só nivel 1 | LV21-100 → só nivel 2 | LV101+ → só nivel 3
+  const nivel = G.lv <= 20 ? 1 : G.lv <= 100 ? 2 : 3;
+  const pool = (G.seeds || []).reduce((acc, s, i) => { if(s.nivel === nivel) acc.push(i); return acc; }, []);
   return shuffle(pool.length >= 10 ? pool : Array.from({length:(G.seeds||[]).length},(_,i)=>i));
 }
 
