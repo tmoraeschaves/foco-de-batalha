@@ -4371,7 +4371,12 @@ function nextRound() {
   }
 
   if(G.idx >= G.ord.length){
+    const lastIdx = G.ord && G.ord.length ? G.ord[G.ord.length - 1] : -1;
     G.ord = buildSeedPool();
+    // Garante que a 1ª semente do novo ciclo não repita a última do anterior
+    if(G.ord.length > 1 && G.ord[0] === lastIdx){
+      G.ord.push(G.ord.shift());
+    }
     G.idx = 0;
     G.variantCycle = (G.variantCycle || 0) + 1;
   }
