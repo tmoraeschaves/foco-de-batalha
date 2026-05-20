@@ -2770,8 +2770,9 @@ function applyLang() {
   const svSaveBtn = document.querySelector('#ov-save .ov-btn');
   if(svSaveBtn) svSaveBtn.textContent = t.sv_save || '💾 SALVAR PROGRESSO';
   const svBtns = document.querySelectorAll('#ov-save .ov-btn-ghost');
-  if(svBtns[0]) svBtns[0].textContent = t.sv_exit   || '🚪 SAIR DO JOGO';
-  if(svBtns[1]) svBtns[1].textContent = t.sv_cancel || '✕ CANCELAR';
+  // índice 0 = backup, 1 = sair, 2 = cancelar
+  if(svBtns[1]) svBtns[1].textContent = t.sv_exit   || '🚪 SAIR DO JOGO';
+  if(svBtns[2]) svBtns[2].textContent = t.sv_cancel || '✕ CANCELAR';
   // Slots/Tiers — textos da aba
   const tierExpandLbl = document.querySelector('#panel-slots .shop-section-title');
   if(tierExpandLbl) tierExpandLbl.textContent = t.tier_expand || 'EXPANDA SEU INVENTÁRIO';
