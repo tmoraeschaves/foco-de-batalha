@@ -4456,11 +4456,24 @@ function startNevoa(s) {
   let d = fogDur;
   document.getElementById('n-tm').textContent = d+'s';
   clearTimers();
+
+  // Guard: garante que startQ é chamado só uma vez (timer ou vídeo, o que vier primeiro)
+  let _nevoa_done = false;
+  const resolveNevoa = () => {
+    if (_nevoa_done) return;
+    _nevoa_done = true;
+    clearInterval(G.tD);
+    startQ(s);
+  };
+
   G.tD = setInterval(() => {
     d--;
     document.getElementById('n-tm').textContent = d+'s';
-    if(d <= 0){ clearInterval(G.tD); startQ(s); }
+    if(d <= 0){ resolveNevoa(); }
   }, 1000);
+
+  // Dispara o vídeo AdMob — se terminar antes do timer, resolve a névoa imediatamente
+  GerenciadorAdMob.mostrarVideoNevoa(resolveNevoa);
 }
 
 function startQ(s) {
@@ -6846,6 +6859,56 @@ function installPwa() {
   _pwaPrompt.userChoice.then(() => { _pwaPrompt = null; });
   document.getElementById('toast').classList.remove('show');
 }
+
+// ══ ADMOB — GERENCIADOR DE VÍDEO NA NÉVOA ══
+const GerenciadorAdMob = {
+  rewardedAdId: 'ca-app-pub-3940256099942544/5224354917',
+  isInitialized: false,
+
+  async inicializar() {
+    try {
+      if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.AdMob) {
+        const { AdMob } = window.Capacitor.Plugins;
+        await AdMob.initialize({ initializeOnTesting: true });
+        this.isInitialized = true;
+        this.preCarregarRecompensado();
+      }
+    } catch(e) { console.error('AdMob init:', e); }
+  },
+
+  async preCarregarRecompensado() {
+    try {
+      if (!this.isInitialized) return;
+      const { AdMob } = window.Capacitor.Plugins;
+      await AdMob.prepareRewarded({ adId: this.rewardedAdId, clearOnKeepOn: false });
+    } catch(e) { console.error('AdMob prepare:', e); }
+  },
+
+  async mostrarVideoNevoa(callbackFim) {
+    try {
+      if (!window.Capacitor || !window.Capacitor.Plugins || !window.Capacitor.Plugins.AdMob) {
+        // Fallback web: deixa o timer de 30s correr normalmente
+        return;
+      }
+      const { AdMob } = window.Capacitor.Plugins;
+      const lr = await AdMob.addListener('onRewardedAdReward', () => {
+        callbackFim(); lr.remove();
+      });
+      const ld = await AdMob.addListener('onRewardedAdDismissed', () => {
+        callbackFim(); ld.remove();
+        this.preCarregarRecompensado();
+      });
+      await AdMob.showRewarded();
+    } catch(e) {
+      console.error('AdMob show:', e);
+      // Fallback: se falhar, deixa o timer de 30s prosseguir
+    }
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => { GerenciadorAdMob.inicializar(); }, 1000);
+});
 
 // - INICIALIZA -
 loadSeeds();

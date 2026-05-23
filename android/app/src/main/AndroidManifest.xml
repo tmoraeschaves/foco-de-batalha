@@ -37,6 +37,11 @@
         <!-- Google Play Games Services — substitui SUBSTITUIR_PELO_ID_DO_PLAY_GAMES em strings.xml -->
         <meta-data android:name="com.google.android.gms.games.APP_ID"
                    android:value="@string/app_id" />
+
+        <!-- Configuração Obrigatória do Google AdMob -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
     </application>
 
     <!-- Permissions -->
