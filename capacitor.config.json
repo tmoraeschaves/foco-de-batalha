@@ -15,8 +15,8 @@
   },
   "plugins": {
     "AdMob": {
-      "initializeOnTesting": true,
-      "androidAppId": "ca-app-pub-3940256099942544~3347511713",
+      "initializeOnTesting": false,
+      "androidAppId": "ca-app-pub-1716240634692030~3985665430",
       "iosAppId": "ca-app-pub-3940256099942544~1458002511"
     },
     "SplashScreen": {

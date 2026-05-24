@@ -41,7 +41,7 @@
         <!-- Configuração Obrigatória do Google AdMob -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
+            android:value="ca-app-pub-1716240634692030~3985665430"/>
     </application>
 
     <!-- Permissions -->

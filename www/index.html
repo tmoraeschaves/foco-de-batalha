@@ -4457,12 +4457,13 @@ function startNevoa(s) {
   document.getElementById('n-tm').textContent = d+'s';
   clearTimers();
 
-  // Guard: garante que startQ é chamado só uma vez (timer ou vídeo, o que vier primeiro)
+  // Guard: garante que startQ é chamado só uma vez
   let _nevoa_done = false;
   const resolveNevoa = () => {
     if (_nevoa_done) return;
     _nevoa_done = true;
     clearInterval(G.tD);
+    GerenciadorAdMob.removerBanner();
     startQ(s);
   };
 
@@ -4472,8 +4473,8 @@ function startNevoa(s) {
     if(d <= 0){ resolveNevoa(); }
   }, 1000);
 
-  // Dispara o vídeo AdMob — se terminar antes do timer, resolve a névoa imediatamente
-  GerenciadorAdMob.mostrarVideoNevoa(resolveNevoa);
+  // Mostra banner AdMob inline durante a névoa
+  GerenciadorAdMob.mostrarBannerNevoa();
 }
 
 function startQ(s) {
@@ -6860,49 +6861,41 @@ function installPwa() {
   document.getElementById('toast').classList.remove('show');
 }
 
-// ══ ADMOB — GERENCIADOR DE VÍDEO NA NÉVOA ══
+// ══ ADMOB — BANNER NA NÉVOA ══
 const GerenciadorAdMob = {
-  rewardedAdId: 'ca-app-pub-3940256099942544/5224354917',
+  bannerAdId: 'ca-app-pub-1716240634692030/2075337873',
   isInitialized: false,
 
   async inicializar() {
     try {
       if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.AdMob) {
         const { AdMob } = window.Capacitor.Plugins;
-        await AdMob.initialize({ initializeOnTesting: true });
+        await AdMob.initialize({ initializeOnTesting: false });
         this.isInitialized = true;
-        this.preCarregarRecompensado();
       }
     } catch(e) { console.error('AdMob init:', e); }
   },
 
-  async preCarregarRecompensado() {
+  async mostrarBannerNevoa() {
     try {
       if (!this.isInitialized) return;
       const { AdMob } = window.Capacitor.Plugins;
-      await AdMob.prepareRewarded({ adId: this.rewardedAdId, clearOnKeepOn: false });
-    } catch(e) { console.error('AdMob prepare:', e); }
+      await AdMob.showBanner({
+        adId: this.bannerAdId,
+        adSize: 'MEDIUM_RECTANGLE',
+        position: 'CENTER',
+        margin: 0,
+        isTesting: false
+      });
+    } catch(e) { console.error('AdMob banner show:', e); }
   },
 
-  async mostrarVideoNevoa(callbackFim) {
+  async removerBanner() {
     try {
-      if (!window.Capacitor || !window.Capacitor.Plugins || !window.Capacitor.Plugins.AdMob) {
-        // Fallback web: deixa o timer de 30s correr normalmente
-        return;
-      }
+      if (!this.isInitialized) return;
       const { AdMob } = window.Capacitor.Plugins;
-      const lr = await AdMob.addListener('onRewardedAdReward', () => {
-        callbackFim(); lr.remove();
-      });
-      const ld = await AdMob.addListener('onRewardedAdDismissed', () => {
-        callbackFim(); ld.remove();
-        this.preCarregarRecompensado();
-      });
-      await AdMob.showRewarded();
-    } catch(e) {
-      console.error('AdMob show:', e);
-      // Fallback: se falhar, deixa o timer de 30s prosseguir
-    }
+      await AdMob.removeBanner();
+    } catch(e) { console.error('AdMob banner remove:', e); }
   }
 };
 
