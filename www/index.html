@@ -3570,7 +3570,7 @@ function redeemCode(code) {
 // - ESTADO GLOBAL -
 const G = {
   nick:"Pupilo", cls:"guerreiro", ico:"⚔️",
-  vidas:1, pulos:1, pts:0, streak:0, lv:1, cy:0, moedas:0,
+  vidas:1, pulos:1, pts:0, streak:0, lv:1, cy:0, moedas:0, adsWatched:0,
   idx:0, ord:[], seeds:[],
   tS:null, tD:null, tQ:null,
   pend:"ok",
@@ -4117,6 +4117,7 @@ function saveGame() {
     goldTalismanActive:G.goldTalismanActive||false,
     escudoTotalActive:G.escudoTotalActive||false,
     xpDoublerUntil:G.xpDoublerUntil||0,
+    adsWatched:G.adsWatched||0,
     battle: G.battle ? {
       enemyId: G.battle.enemy.id,
       enemyHP: G.battle.enemyHP,
@@ -4142,6 +4143,7 @@ function silentSave() {
       goldTalismanActive:G.goldTalismanActive||false,
       escudoTotalActive:G.escudoTotalActive||false,
       xpDoublerUntil:G.xpDoublerUntil||0,
+      adsWatched:G.adsWatched||0,
       battle: G.battle ? {
         enemyId: G.battle.enemy.id,
         enemyHP: G.battle.enemyHP,
@@ -4178,6 +4180,7 @@ function loadAndContinue() {
   G.escudoTotalActive = s.escudoTotalActive || false;
   G.xpDoublerUntil = s.xpDoublerUntil || 0;
   G.variantCycle = s.variantCycle || 0;
+  G.adsWatched = s.adsWatched || 0;
   _seedIndex = null; _currentQ = null;
   if(s.ord && s.ord.length === G.seeds.length) {
     G.ord = s.ord;
@@ -4457,13 +4460,12 @@ function startNevoa(s) {
   document.getElementById('n-tm').textContent = d+'s';
   clearTimers();
 
-  // Guard: garante que startQ é chamado só uma vez
+  // Guard: garante que startQ é chamado só uma vez (anúncio ou timer, o que fechar primeiro)
   let _nevoa_done = false;
   const resolveNevoa = () => {
     if (_nevoa_done) return;
     _nevoa_done = true;
     clearInterval(G.tD);
-    GerenciadorAdMob.removerBanner();
     startQ(s);
   };
 
@@ -4473,8 +4475,8 @@ function startNevoa(s) {
     if(d <= 0){ resolveNevoa(); }
   }, 1000);
 
-  // Mostra banner AdMob inline durante a névoa
-  GerenciadorAdMob.mostrarBannerNevoa();
+  // Intercalar premiado — quando fechar, resolve a névoa imediatamente
+  GerenciadorAdMob.mostrarNevoa(resolveNevoa);
 }
 
 function startQ(s) {
@@ -6861,9 +6863,9 @@ function installPwa() {
   document.getElementById('toast').classList.remove('show');
 }
 
-// ══ ADMOB — BANNER NA NÉVOA ══
+// ══ ADMOB — INTERCALAR PREMIADO NA NÉVOA ══
 const GerenciadorAdMob = {
-  bannerAdId: 'ca-app-pub-1716240634692030/2075337873',
+  adId: 'ca-app-pub-1716240634692030/6641268842',
   isInitialized: false,
 
   async inicializar() {
@@ -6872,30 +6874,48 @@ const GerenciadorAdMob = {
         const { AdMob } = window.Capacitor.Plugins;
         await AdMob.initialize({ initializeOnTesting: false });
         this.isInitialized = true;
+        this.preCarregar();
       }
     } catch(e) { console.error('AdMob init:', e); }
   },
 
-  async mostrarBannerNevoa() {
+  async preCarregar() {
     try {
       if (!this.isInitialized) return;
       const { AdMob } = window.Capacitor.Plugins;
-      await AdMob.showBanner({
-        adId: this.bannerAdId,
-        adSize: 'MEDIUM_RECTANGLE',
-        position: 'CENTER',
-        margin: 0,
-        isTesting: false
-      });
-    } catch(e) { console.error('AdMob banner show:', e); }
+      await AdMob.prepareRewardedInterstitial({ adId: this.adId });
+    } catch(e) { console.error('AdMob prepare:', e); }
   },
 
-  async removerBanner() {
+  recompensarFoco() {
+    const reward = (G.adsWatched || 0) + 1;
+    G.adsWatched = (G.adsWatched || 0) + 1;
+    G.moedas += reward;
+    updHUD();
+    showToast(`+${reward}💰 por manter o foco! 🧠`);
+    silentSave();
+  },
+
+  async mostrarNevoa(callbackFim) {
     try {
-      if (!this.isInitialized) return;
+      if (!window.Capacitor || !window.Capacitor.Plugins || !window.Capacitor.Plugins.AdMob) {
+        return; // Fallback web: timer de 30s corre normalmente
+      }
       const { AdMob } = window.Capacitor.Plugins;
-      await AdMob.removeBanner();
-    } catch(e) { console.error('AdMob banner remove:', e); }
+      const lr = await AdMob.addListener('onRewardedInterstitialAdRewarded', () => {
+        this.recompensarFoco();
+        lr.remove();
+      });
+      const ld = await AdMob.addListener('onRewardedInterstitialAdClosed', () => {
+        callbackFim();
+        ld.remove();
+        this.preCarregar();
+      });
+      await AdMob.showRewardedInterstitial();
+    } catch(e) {
+      console.error('AdMob show:', e);
+      // Fallback: se falhar, timer de 30s prossegue normalmente
+    }
   }
 };
 
