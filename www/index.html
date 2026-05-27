@@ -4390,6 +4390,7 @@ function nextRound() {
   updHUD();
   updateArenaHp();
   showPhase('ph-semente');
+  GerenciadorAdMob.preCarregar(); // Garante que o anúncio está pronto para a névoa
 
   // Usa versão localizada se disponível no JSON (ex: s.semente_en), senão PT-BR
   const sementeText = s['semente_'+LANG] || s.semente;
@@ -6865,14 +6866,14 @@ function installPwa() {
 
 // ══ ADMOB — INTERCALAR PREMIADO NA NÉVOA ══
 const GerenciadorAdMob = {
-  adId: 'ca-app-pub-1716240634692030/6641268842',
+  adId: 'ca-app-pub-3940256099942544/5354046379', // ID de teste rewarded interstitial
   isInitialized: false,
 
   async inicializar() {
     try {
       if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.AdMob) {
         const { AdMob } = window.Capacitor.Plugins;
-        await AdMob.initialize({ initializeOnTesting: false });
+        await AdMob.initialize({ initializeOnTesting: true });
         this.isInitialized = true;
         this.preCarregar();
       }
@@ -6883,7 +6884,7 @@ const GerenciadorAdMob = {
     try {
       if (!this.isInitialized) return;
       const { AdMob } = window.Capacitor.Plugins;
-      await AdMob.prepareRewardedInterstitial({ adId: this.adId });
+      await AdMob.prepareRewarded({ adId: this.adId });
     } catch(e) { console.error('AdMob prepare:', e); }
   },
 
@@ -6902,19 +6903,18 @@ const GerenciadorAdMob = {
         return; // Fallback web: timer de 30s corre normalmente
       }
       const { AdMob } = window.Capacitor.Plugins;
-      const lr = await AdMob.addListener('onRewardedInterstitialAdRewarded', () => {
+      const lr = await AdMob.addListener('onRewardedVideoAdReward', () => {
         this.recompensarFoco();
         lr.remove();
       });
-      const ld = await AdMob.addListener('onRewardedInterstitialAdClosed', () => {
+      const ld = await AdMob.addListener('onRewardedVideoAdDismissed', () => {
         callbackFim();
         ld.remove();
         this.preCarregar();
       });
-      await AdMob.showRewardedInterstitial();
+      await AdMob.showRewarded();
     } catch(e) {
       console.error('AdMob show:', e);
-      // Fallback: se falhar, timer de 30s prossegue normalmente
     }
   }
 };
