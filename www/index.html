@@ -6872,20 +6872,30 @@ const GerenciadorAdMob = {
   async inicializar() {
     try {
       if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.AdMob) {
+        showToast('🔧 AdMob: plugin detectado');
         const { AdMob } = window.Capacitor.Plugins;
         await AdMob.initialize({ initializeOnTesting: true });
         this.isInitialized = true;
+        showToast('✅ AdMob: inicializado');
         this.preCarregar();
+      } else {
+        showToast('❌ AdMob: plugin NAO detectado');
       }
-    } catch(e) { console.error('AdMob init:', e); }
+    } catch(e) {
+      showToast('❌ AdMob init erro: ' + e.message);
+    }
   },
 
   async preCarregar() {
     try {
       if (!this.isInitialized) return;
       const { AdMob } = window.Capacitor.Plugins;
+      showToast('⏳ AdMob: carregando anuncio...');
       await AdMob.prepareRewarded({ adId: this.adId });
-    } catch(e) { console.error('AdMob prepare:', e); }
+      showToast('✅ AdMob: anuncio pronto');
+    } catch(e) {
+      showToast('❌ AdMob prepare erro: ' + e.message);
+    }
   },
 
   recompensarFoco() {
@@ -6900,9 +6910,15 @@ const GerenciadorAdMob = {
   async mostrarNevoa(callbackFim) {
     try {
       if (!window.Capacitor || !window.Capacitor.Plugins || !window.Capacitor.Plugins.AdMob) {
-        return; // Fallback web: timer de 30s corre normalmente
+        showToast('⚠️ AdMob: sem Capacitor — timer normal');
+        return;
+      }
+      if (!this.isInitialized) {
+        showToast('⚠️ AdMob: nao inicializado — timer normal');
+        return;
       }
       const { AdMob } = window.Capacitor.Plugins;
+      showToast('▶️ AdMob: abrindo anuncio...');
       const lr = await AdMob.addListener('onRewardedVideoAdReward', () => {
         this.recompensarFoco();
         lr.remove();
@@ -6914,7 +6930,7 @@ const GerenciadorAdMob = {
       });
       await AdMob.showRewarded();
     } catch(e) {
-      console.error('AdMob show:', e);
+      showToast('❌ AdMob show erro: ' + e.message);
     }
   }
 };

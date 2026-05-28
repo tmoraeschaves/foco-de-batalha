@@ -23,6 +23,12 @@ android/.idea/
 android/build/
 android/app/build/
 
+# IDE local (Android Studio / IntelliJ)
+.idea/
+
+# Artes originais — ficheiros grandes, manter no Drive
+Foco de Batalha ARTES DO JOGO/
+
 # Python cache
 __pycache__/
 *.pyc
