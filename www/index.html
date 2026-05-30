@@ -6864,10 +6864,12 @@ function installPwa() {
   document.getElementById('toast').classList.remove('show');
 }
 
-// ══ ADMOB — INTERCALAR PREMIADO NA NÉVOA ══
+// ══ ADMOB — REWARDED VIDEO NA NÉVOA ══
+// Plugin v6 suporta: prepareRewardVideoAd / showRewardVideoAd (não RewardedInterstitial)
 const GerenciadorAdMob = {
-  adId: 'ca-app-pub-3940256099942544/5354046379', // ID de teste rewarded interstitial
+  adId: 'ca-app-pub-3940256099942544/5224354917', // ID teste Rewarded (Google oficial)
   isInitialized: false,
+  adReady: false,
 
   async inicializar() {
     try {
@@ -6877,30 +6879,30 @@ const GerenciadorAdMob = {
         await AdMob.initialize({ initializeOnTesting: true });
         this.isInitialized = true;
         showToast('✅ AdMob: inicializado');
-        this.preCarregar();
+        await this.preCarregar();
       } else {
         showToast('❌ AdMob: plugin NAO detectado');
       }
-    } catch(e) {
-      showToast('❌ AdMob init erro: ' + e.message);
-    }
+    } catch(e) { showToast('❌ AdMob init erro: ' + e.message); }
   },
 
   async preCarregar() {
     try {
       if (!this.isInitialized) return;
-      const { AdMob } = window.Capacitor.Plugins;
       showToast('⏳ AdMob: carregando anuncio...');
-      await AdMob.prepareRewarded({ adId: this.adId });
+      const { AdMob } = window.Capacitor.Plugins;
+      await AdMob.prepareRewardVideoAd({ adId: this.adId });
+      this.adReady = true;
       showToast('✅ AdMob: anuncio pronto');
     } catch(e) {
+      this.adReady = false;
       showToast('❌ AdMob prepare erro: ' + e.message);
     }
   },
 
   recompensarFoco() {
-    const reward = (G.adsWatched || 0) + 1;
     G.adsWatched = (G.adsWatched || 0) + 1;
+    const reward = G.adsWatched;
     G.moedas += reward;
     updHUD();
     showToast(`+${reward}💰 por manter o foco! 🧠`);
@@ -6910,27 +6912,38 @@ const GerenciadorAdMob = {
   async mostrarNevoa(callbackFim) {
     try {
       if (!window.Capacitor || !window.Capacitor.Plugins || !window.Capacitor.Plugins.AdMob) {
-        showToast('⚠️ AdMob: sem Capacitor — timer normal');
+        return; // sem Capacitor — timer de 30s corre normalmente
+      }
+      if (!this.isInitialized || !this.adReady) {
+        showToast('⚠️ AdMob: anuncio nao pronto');
         return;
       }
-      if (!this.isInitialized) {
-        showToast('⚠️ AdMob: nao inicializado — timer normal');
-        return;
-      }
-      const { AdMob } = window.Capacitor.Plugins;
+
       showToast('▶️ AdMob: abrindo anuncio...');
+      const { AdMob } = window.Capacitor.Plugins;
+      this.adReady = false;
+
       const lr = await AdMob.addListener('onRewardedVideoAdReward', () => {
         this.recompensarFoco();
-        lr.remove();
       });
+
       const ld = await AdMob.addListener('onRewardedVideoAdDismissed', () => {
+        lr.remove(); ld.remove();
         callbackFim();
-        ld.remove();
         this.preCarregar();
       });
-      await AdMob.showRewarded();
+
+      const lf = await AdMob.addListener('onRewardedVideoAdFailedToShow', (err) => {
+        lr.remove(); ld.remove(); lf.remove();
+        showToast('❌ AdMob: falha ao exibir');
+        callbackFim();
+        this.preCarregar();
+      });
+
+      await AdMob.showRewardVideoAd();
     } catch(e) {
       showToast('❌ AdMob show erro: ' + e.message);
+      callbackFim();
     }
   }
 };
